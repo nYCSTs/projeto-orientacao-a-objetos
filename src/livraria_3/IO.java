@@ -28,8 +28,8 @@ public class IO {
 		ArrayList<String> dados = new ArrayList<String>();
 
 		try {
-			for (; fileRead("usuario-".concat(Integer.toString(userID))).exists(); userID++) {
-				file = fileRead("usuario-".concat(Integer.toString(userID)));
+			for (; fileRead("dados/usuario-".concat(Integer.toString(userID))).exists(); userID++) {
+				file = fileRead("dados/usuario-".concat(Integer.toString(userID)));
 				FileReader fr= new FileReader(file);
 				BufferedReader br = new BufferedReader(fr);
 				while (br.ready()) {
@@ -45,22 +45,34 @@ public class IO {
 		
 		return usuarios;
 	}
+	
+	public Livro criarLivro() {
+		Livro livro = new Livro();
+		return livro;
+	}
 
-	public Livro leituraLivros(String fileName) {
-		File file = new File(fileName);
-		Livro livro = new Livro(); 
+	public ArrayList<Livro> leituraLivros() {
 		String line;
-
+		File file;
+		Livro livro;
+		ArrayList<Livro> livros = new ArrayList<Livro>();
+		
 		try {
-			if (file.exists()) {
+			for (int i = 1; fileRead("livros/livro-".concat(Integer.toString(i))).exists(); i++) {
+				file = fileRead("livros/livro-".concat(Integer.toString(i)));
+				livro = criarLivro();
 				FileReader fr = new FileReader(file);
 				BufferedReader br = new BufferedReader(fr);
+				
 				//categoria
 				line = br.readLine();
 				livro.setCategoria(line);
 				//id
 				line = br.readLine();
 				livro.setID(Integer.parseInt(line));
+				//preco
+				line = br.readLine();
+				livro.setPreco(Double.parseDouble(line));
 				//quantidade
 				line = br.readLine();
 				livro.setQuantidadeEstoque(Integer.parseInt(line));
@@ -73,21 +85,21 @@ public class IO {
 				//ISBN
 				line = br.readLine();
 				livro.setISBN(line);
-
-			} else {
-				livro.setCategoria("END");
-			}
+				
+				livros.add(livro);
+			} 
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		return livro;
+		
+		return livros;
 	}
 
 	//REGISTRO
 	public void registrarUsuario(Usuario usuario, int userID) {
 		try {
-			File file = new File("./usuario-".concat(Integer.toString(userID)));
+			File file = new File("dados/usuario-".concat(Integer.toString(userID)));
 			FileWriter writer = new FileWriter(file);
 			BufferedWriter bw = new BufferedWriter(writer);
 

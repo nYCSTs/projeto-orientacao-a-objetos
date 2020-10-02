@@ -1,90 +1,39 @@
 package livraria_3;
 import java.util.ArrayList;
-import java.util.Scanner;
+/* TO DO
+ * solicitar endereco na parte do pagamento
+ * info
+ * mostrar todos itens antes de realizar compra
+ * deixar tudo public
+ * arrumar caso de 0 em "insira o id do livro desejado (insira 0 para retornar a selecao de categoria)"
+ * 
+ * limpeza de tela apos realizar cadastro e logar
+ * melhorar cadastro, colocando restricoes
+ * comentar mais o codigo
+ * melhorar textos
+ */
 
-public class Livraria {
-	public static String meuScanner(int tipo) {
-		Scanner scan = new Scanner(System.in);
-		if (tipo == 1) {
-			return scan.next();
-		} else {
-			return scan.nextLine();
-		}
-	}	
-	
-	public static Usuario criarConta(int userID) {
-		Usuario usuario = new Usuario();
-		String nome, cpf, identidade, filiacao, escolaridade, sexo, estadoCivil, naturalidade, endereco, cargo, telefone, email, senha;
-		
-		System.out.print("Nome: ");
-	    nome = meuScanner(2);
-	    
-	    do {
-	    	System.out.print("CPF (somente numeros): ");
-		    cpf = meuScanner(1);
-	    } while (!cpf.matches("-?\\d+(\\.\\d+)?") || cpf.length() != 11);
-	    
-	    System.out.print("Identidade (somente numeros): ");
-	    identidade = meuScanner(1);
-	    
-	    System.out.print("Filiação: ");
-	    filiacao = meuScanner(2);
-	    
-	    System.out.print("Escolaridade: ");
-	    escolaridade = meuScanner(2);
-	    
-	    System.out.print("Sexo (M/F): ");
-	    sexo = meuScanner(1);
-	    
-	    System.out.print("Estado Civil: ");
-	    estadoCivil = meuScanner(1);
-	    
-	    System.out.print("Naturalidade: ");
-	    naturalidade = meuScanner(1);
-	    
-	    System.out.print("Endereço: ");
-	    endereco = meuScanner(2);
-	    
-	    System.out.print("Cargo: ");
-	    cargo = meuScanner(2);
-	    
-	    System.out.print("Telefone: ");
-	    telefone = meuScanner(1);
-	    
-	    System.out.print("email: ");
-	    email = meuScanner(1);
-	    
-	    System.out.print("senha: ");
-	    senha = meuScanner(2);
-		
-		usuario.setValues(userID, nome, cpf, identidade, filiacao, escolaridade, sexo, estadoCivil, naturalidade, endereco, cargo, telefone, email, senha);
-	    
-		return usuario;
-	}
-	
-	public static void verificarCatalogo(ArrayList<Livro> livros) {
-		for (int i = 0; i < livros.size(); i++) {
-			System.out.println("ID: " + livros.get(i).getID());
-			System.out.println("Quantidade em estoque: " + livros.get(i).getQuantidadeEstoque());
-			System.out.println("Nome: " + livros.get(i).getBookName());
-			System.out.println("Autor: " + livros.get(i).getAuthorName());
-			System.out.println("ISBN: " + livros.get(i).getISBN());
-			System.out.println("---------------");
-		}
-	}
-	
+/*  PERGUNTAS
+ *  main cheia, e um problema?
+ *  limpar tela
+ *  perguntar sobre praticamente toda parte final do texto 
+ *  quem pode ver a info?
+ *  o que e filiação, cargo
+ */
+
+public class Livraria {		
 	public static void main(String[] args) {
 		IO leitura = new IO();
 		Livro livro = new Livro();
+		Ferramentas ferramenta = new Ferramentas();
+		Usuario usuario = new Usuario();
+		Compra compra = new Compra();
+		Info info = new Info();
 
-		ArrayList<Livro> livrosInfantil = new ArrayList<Livro>();
-		ArrayList<Livro> livrosTecnico = new ArrayList<Livro>();
-		ArrayList<Livro> livrosFiccao = new ArrayList<Livro>();
-		ArrayList<Livro> livrosNFiccao = new ArrayList<Livro>();
-		
+		ArrayList<Livro> catalogo = new ArrayList<Livro>();
 		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 
-		int input, userID = 1, bookID = 1, loggedAccount;
+		int input, userID = 1, loggedAccount = 0, id_sel = -1, quantidade, qnt_total = 0;
 		boolean login_state = false, exit = false;
 		
 		//Leitura usuarios
@@ -92,152 +41,187 @@ public class Livraria {
 		userID = leitura.getUserID();
 		
 		//Leitura livros
-		for (; !exit; bookID++) {
-			livro = leitura.leituraLivros("livro-".concat(Integer.toString(bookID)));
-			switch (livro.getCategoria().trim()) {
-				case "INFANTIL":
-					livrosInfantil.add(livro);
-					break;
-				case "TECNICO":
-					livrosTecnico.add(livro);
-					break;
-				case "FICCAO":
-					livrosFiccao.add(livro);
-					break;
-				case "NAO FICCAO":
-					livrosNFiccao.add(livro);
-					break;
-				default:
-					System.out.println(livro.getCategoria());
-					exit = true;
-			}
-		}
-		
-		exit = false;
+		catalogo = leitura.leituraLivros();
+
 		while (!exit) {
 			//NAO LOGADO
 			if (login_state == false) {
-				System.out.println("\t1 - Realizar login\n\t2 - Realizar cadastro\n\t3 - Verificar catalogo\n\t4 - Sair\n>> ");
-				input = Integer.parseInt(meuScanner(1));
-				
-				switch(input) {
+				System.out.println("\t1 - Realizar login\n\t2 - Realizar cadastro\n\t3 - Verificar catalogo\n\t4 - Sair\n>> ");	
+				input = ferramenta.scanInt();
+				switch (input) {
 				//login
 				case 1:
 					String email, senha, nome = "";
 					System.out.print("email: ");
-					email = meuScanner(1);
+					email = ferramenta.scan();
 					System.out.print("senha: ");
-					senha = meuScanner(2);
+					senha = ferramenta.scan();
 					
 					for (loggedAccount = 0; loggedAccount < usuarios.size(); loggedAccount++) {			
 						if (usuarios.get(loggedAccount).getEmail().compareTo(email) == 0) {
 							if (usuarios.get(loggedAccount).getSenha().compareTo(senha) == 0) {
 								nome = usuarios.get(loggedAccount).getNome();
 								login_state = true;	
+								break;
 							} 
 						}
 					}
-					System.out.println(login_state ? "Login realizado com sucesso! Bem vindo " + nome : "email e/ou senha incorretos.");
+					System.out.println(login_state ? "\nLogin realizado com sucesso! Bem vindo " + nome : "\nemail e/ou senha incorretos.");
 					break;
 				//cadastro
 				case 2:
-					usuarios.add(criarConta(userID));
+					usuarios.add(usuario.criarConta(userID));  
 					leitura.registrarUsuario(usuarios.get(userID - 1), userID);
 					userID++;
 					break;
 					
 				//verificar catalogo
 				case 3:
-					System.out.println("\t1 - Infantil\n\t2 - Tecnico\n\t3 - Ficcao\n\t4 - Não Ficcao");
-					input = Integer.parseInt(meuScanner(1));
+					do {
+						System.out.println("\t1 - Infantil\n\t2 - Tecnico\n\t3 - Ficcao\n\t4 - Não Ficcao");
+						input = ferramenta.scanInt();
+					} while (input < 1 || input > 4);
 					switch (input) {
 					case 1:
-						verificarCatalogo(livrosInfantil);
+						livro.mostrarCatalogo("INFANTIL", catalogo);
 						break;
 					case 2:
-						verificarCatalogo(livrosTecnico);
+						livro.mostrarCatalogo("TECNICO", catalogo);
 						break;
 					case 3:
-						verificarCatalogo(livrosFiccao);
+						livro.mostrarCatalogo("FICCAO", catalogo);
 						break;
 					case 4:
-						verificarCatalogo(livrosNFiccao);
+						livro.mostrarCatalogo("NAO FICCAO", catalogo);
 						break;
 					}
 					break;
+				//sair
 				case 4:
 					exit = true;
-					break;
-				default:
-					System.out.println("Opcao invalida, tente novamente.");
-
 				}
 			} 
+			
 			//LOGADO
 			else {
-				System.out.println("\t1 - Verificar catalogo\n\t2 - Sair");
-			}
-		}
-		
-		/*
-		while (true) {
-			//não logado
-			if (login_state == false) {
-				System.out.print("1) Verificar catalogo\n2) Login\n3) Criar conta\n4) Sair\n >> ");
-				input = Integer.parseInt(meuScanner(1));
+				do {
+					System.out.println("\t1 - Verificar catalogo\n\t2 - INFO\n\t3 - Logout\n\t4 - Sair");
+					input = ferramenta.scanInt();
+				} while (input < 1 || input > 4);
 				
-				//catalogo
+				//verificar catalogo
 				if (input == 1) {
-					//verificarCatalogo(livros);
-					
-				//realizar login
-				} else if (input == 2) {
-					System.out.print("email: ");
-					email = meuScanner(1);
-					System.out.print("senha: ");
-					senha = meuScanner(2);
-					
-					for (int i = 0; i < usuarios.size(); i++) {			
-						if (usuarios.get(i).getEmail().compareTo(email) == 0) {
-							if (usuarios.get(i).getSenha().compareTo(senha) == 0) {
-								login_state = true;
-							} else {
-								break;
+					while (!exit) {
+						do {
+							System.out.println("\t1 - Infantil\n\t2 - Tecnico\n\t3 - Ficcao\n\t4 - Não Ficcao");
+							input = ferramenta.scanInt();
+						} while (input < 1 || input > 4);
+						
+						switch (input) {
+						case 1:
+							livro.mostrarCatalogo("INFANTIL", catalogo);
+							break;
+						case 2:
+							livro.mostrarCatalogo("TECNICO", catalogo);
+							break;
+						case 3:
+							livro.mostrarCatalogo("FICCAO", catalogo);
+							break;
+						case 4:
+							livro.mostrarCatalogo("NAO FICCAO", catalogo);
+							break;
+						}	
+						
+						do {
+							System.out.println("\n\t1 - Adicionar livro ao carrinho\n\t2 - Voltar a escolha de categoria\n\t3 - Editar carrinho\n\t4 - Prosseguir para compra");
+							input = ferramenta.scanInt();
+						} while (input < 1 || input > 2);
+						
+						//exit e false
+						if (input == 1) {
+							while (!exit) {				
+								do {
+									System.out.println("Insira o ID do livro desejado (insira 0 para retornar a selecao de categoria): ");
+									id_sel = ferramenta.scanInt();
+								} while (catalogo.size() < id_sel && id_sel != 0);
+								
+								
+								for (int i = 0; i < catalogo.size() && id_sel != 0; i++) {
+									if (catalogo.get(i).getID() == id_sel) {
+										if (catalogo.get(i).getQuantidadeEstoque() == 0) {
+											System.out.println("Este livro esta indisponivel no momento. :(");
+											exit = true;
+											break;
+										} else {
+											do {
+												System.out.println("Quantidade: ");
+												quantidade = ferramenta.scanInt();
+											} while (catalogo.get(i).getQuantidadeEstoque() < quantidade);
+											catalogo.get(i).setQuantidadeEstoque(catalogo.get(i).getQuantidadeEstoque() - quantidade);
+											compra.adicionarItem(i, catalogo.get(i).getBookName(), quantidade, catalogo.get(i).getPreco());
+											System.out.println("Livro adicionado ao carrinho!\n");
+											qnt_total += quantidade;
+										}									
+										
+										while (!exit) {
+											System.out.println("\t1 - Continuar comprando\n\t2 - Editar carrinho\n\t3 - Prosseguir para pagamento");
+											input = ferramenta.scanInt();
+											
+											if (input == 1) {
+												exit = true;
+											} else if (input == 2) {
+												catalogo = compra.removerItem(catalogo);
+												qnt_total -= quantidade;
+											} else {
+												exit = true;
+												id_sel = -1;
+											}
+										}
+										break;
+									}
+								}
+							}
+
+							if (id_sel == -1) {
+								compra.pagamento();
+								if (compra.getStatusPagamento()) {
+									System.out.println(compra.getCEP().charAt(0) == '6' ? "\nObrigado, seu pedido sera entregue daqui a 10 dias." : "\nObrigado, seu pedido sera entregue daqui a 5 dias");
+									usuarios.get(loggedAccount).addCompra(qnt_total, compra);
+								}
+ 							} else {
+ 								exit = false;
+ 								continue;
+ 							}
+						} else if (input == 2) {
+							exit = false;
+							continue;
+						} else if (input == 3) {
+							compra.pagamento();
+							if (compra.getStatusPagamento()) {
+								System.out.println(compra.getCEP().charAt(0) == '6' ? "\nObrigado, seu pedido sera entregue daqui a 10 dias." : "\nObrigado, seu pedido sera entregue daqui a 5 dias");
+								usuarios.get(loggedAccount).addCompra(qnt_total, compra);
 							}
 						}
+						break;
 					}
 					
-					if (login_state == false) {
-						System.out.println("email/senha incorretos.");
-					} else {
-						System.out.println("login realizado com sucesso!");
-					}
-					
-				//realizar cadastro
-				} else if (input == 3) {
-					//usuarios = leitura.insereUsuario(leitura.fileUsers, usuarios, lastUserID);
-				//sair
-				} else if (input == 4) {
-					break;
+				//INFO
+				} else if (input == 2) {
+					System.out.println("1 - Livros em estoque\n\t2 - Dados de todos usuarios\n\t3 - \n");
+					info.dadosUsuario(usuarios);
 				}
 				
-			//logado
-			} else {				
-				System.out.print("1) Comprar\n2) Verificar catalogo\n3) Adicionar Livro >> ");
-				input = Integer.parseInt(meuScanner(1));
-				switch(input) {
-				case 1:
-					break;
-				case 2: 
-					verificarCatalogo(livros);
-				case 3:
-					leitura.insereLivro(leitura.fileBooks, livros, lastBookID);
+				//LOGOUT
+				else if (input == 3) {
+					login_state = false;
+				} 
+				
+				//FECHAR
+				else {
+					exit = true;
 				}
-				
-				
 			}
-		}
-		*/
 			
+		}
 	}
 }
