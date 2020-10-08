@@ -1,6 +1,8 @@
 CATEGORIA
 ID
-Quantidade em estoque
 Titulo do livro
+Preco
 Autor
+Editora
+Quantidade em estoque
 ISBN
