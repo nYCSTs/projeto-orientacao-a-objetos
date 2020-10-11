@@ -10,6 +10,7 @@ public class Livro {
 	private String ISBN;
 	private String editora;
 	
+	
 	//SET
 	public void setID(int id) {
 		this.ID = id;
@@ -42,7 +43,6 @@ public class Livro {
 	public void setISBN(String ISBN) {
 		this.ISBN = ISBN;
 	}
-
 
 	//GET
 	public int getID() {

@@ -3,7 +3,7 @@ package livraria_3;
 import java.util.ArrayList;
 
 public class Operacoes {
-	public int realizarLogin(ArrayList<Usuario> usuarios) {
+	public int realizarLogin(ArrayList<Usuario> usuario) {
 		int loggedAccount;
 		String email, senha, nome;
 		Ferramentas ferramenta = new Ferramentas();
@@ -13,23 +13,23 @@ public class Operacoes {
 		System.out.print("senha: ");
 		senha = ferramenta.scan();
 		
-		for (loggedAccount = 0; loggedAccount < usuarios.size(); loggedAccount++) {			
-			if (usuarios.get(loggedAccount).getEmail().compareTo(email) == 0) {
-				if (usuarios.get(loggedAccount).getSenha().compareTo(senha) == 0) {
-					nome = usuarios.get(loggedAccount).getNome();
+		for (loggedAccount = 0; loggedAccount < usuario.size(); loggedAccount++) {			
+			if (usuario.get(loggedAccount).getEmail().equals(email)) {
+				if (usuario.get(loggedAccount).getSenha().equals(senha)) {
+					nome = usuario.get(loggedAccount).getNome();
 					System.out.println("\nLogin realizado com sucesso! Bem vindo " + nome);
 					return loggedAccount;
 				} else {
 					System.out.println("\nemail e/ou senha incorretos.");
-					return 0;
+					return -1;
 				}
 			}
 		}
 		System.out.println("\nemail e/ou senha incorretos.");
-		return 0;
+		return -1;
 	}
 	
-	public Usuario registrarConta(int userID) {
+	public Usuario registrarConta(int userID, ArrayList<Usuario> usuarios) {
 		String str;
 		ArrayList<String> dados = new ArrayList<String>();
 		Ferramentas ferramenta = new Ferramentas();
@@ -52,7 +52,11 @@ public class Operacoes {
 	    System.out.print("Escolaridade: ");
 	    dados.add(ferramenta.scanNextLine());
 	    
-	    System.out.print("Sexo (M/F): ");
+	    do {
+	    	System.out.print("Sexo (M/F): ");
+	    	str = ferramenta.scan();
+	    } while (str != "M" && str != "F");
+	    
 	    dados.add(ferramenta.scan());
 	    
 	    System.out.print("Estado Civil: ");
@@ -64,15 +68,19 @@ public class Operacoes {
 	    System.out.print("Endereco: ");
 	    dados.add(ferramenta.scanNextLine());
 	    
-	    System.out.print("Cargo: ");
-	    dados.add(ferramenta.scanNextLine());
+	    do {
+	    	System.out.print("Cargo (Cliente ou Funcionario): ");
+		    str = ferramenta.scanNextLine().toLowerCase();
+	    } while (str != "funcionario" && str != "cliente");
+	    dados.add(str);
+	    
 	    
 	    System.out.print("Telefone: ");
 	    dados.add(ferramenta.scan());
 	    
-	    System.out.print("email: ");
-	    dados.add(ferramenta.scan());
-	    
+    	System.out.print("email: ");
+    	dados.add(ferramenta.scan());
+	    	
 	    System.out.print("senha: ");
 	    dados.add(ferramenta.scanNextLine());
 		
@@ -148,7 +156,7 @@ public class Operacoes {
 					do {
 						System.out.println("ID do livro: ");
 						idSelecionado = ferramenta.scanInt();
-					} while (idSelecionado < 0 && catalogo.size() < idSelecionado);
+					} while (idSelecionado < 0 && catalogo.size() > idSelecionado);
 					
 					for (int i = 0; i < catalogo.size(); i++) {
 						if (catalogo.get(i).getID() == idSelecionado) {

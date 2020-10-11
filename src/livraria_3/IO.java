@@ -22,14 +22,14 @@ public class IO {
 	}
 	
 	//LEITURA
-	public ArrayList<Usuario> leituraUsuarios() {
+	public ArrayList<Usuario> leituraUsuarios(String fileName) {
 		File file;
 		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 		ArrayList<String> dados = new ArrayList<String>();
 
 		try {
-			for (; fileRead("dados/usuario-".concat(Integer.toString(userID))).exists(); userID++) {
-				file = fileRead("dados/usuario-".concat(Integer.toString(userID)));
+			for (; fileRead(fileName.concat(Integer.toString(userID))).exists(); userID++) {
+				file = fileRead(fileName.concat(Integer.toString(userID)));
 				FileReader fr= new FileReader(file);
 				BufferedReader br = new BufferedReader(fr);
 				while (br.ready()) {
@@ -38,6 +38,7 @@ public class IO {
 				
 				usuarios.add(criarUsuario(dados));
 				dados.clear();
+				br.close();
 			}
 		} catch (IOException ex)  {
 			ex.getStackTrace();
@@ -90,6 +91,7 @@ public class IO {
 				livro.setISBN(line);
 				
 				livros.add(livro);
+				br.close();
 			}
 			
 		} catch (IOException ex) {
@@ -103,7 +105,7 @@ public class IO {
 	//REGISTRO
 	public void registrarUsuario(Usuario usuario, int userID) {
 		try {
-			File file = new File("dados/usuario-".concat(Integer.toString(userID)));
+			File file = new File("clientes/cliente-".concat(Integer.toString(userID)));
 			FileWriter writer = new FileWriter(file);
 			BufferedWriter bw = new BufferedWriter(writer);
 
@@ -138,9 +140,5 @@ public class IO {
 		} catch (IOException ex) {
 			ex.getStackTrace();
 		}
-	}
-	
-	public int getUserID() {
-		return this.userID;
 	}
 }

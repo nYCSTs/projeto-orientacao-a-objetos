@@ -3,19 +3,18 @@ import java.util.ArrayList;
 import java.text.DecimalFormat;
 
 public class Carrinho {
-	private ArrayList<Pedido> sacola = new ArrayList<Pedido>();
+	private ArrayList<Item> sacola = new ArrayList<Item>();
 	public double total = 0;
 	public int quantidadeLivros = 0;
 	private DecimalFormat format = new DecimalFormat("#0.00");
 	
 	public boolean verificarCarrinho() {
-		
 		double total = 0;
 
 		if (sacola.size() > 0) {
 			System.out.println("Atualmente seu carrinho conta com os itens: ");
 			for (int i = 0; i < sacola.size(); i++) {
-				System.out.println("(" + (i+1) + ") " + sacola.get(i).getNomeLivro() + " (" + sacola.get(i).getQuantidade() + "x)  -  " + format.format(sacola.get(i).getQuantidade() * sacola.get(i).getPreco()) + "R$");
+				System.out.println("(" + (i+1) + ") " + sacola.get(i).getBookName() + " (" + sacola.get(i).getQuantidade() + "x)  -  " + format.format(sacola.get(i).getQuantidade() * sacola.get(i).getPreco()) + "R$");
 				total += sacola.get(i).getQuantidade() * sacola.get(i).getPreco();
 			}
 			System.out.println("Total: " + format.format(total) + "R$");
@@ -27,11 +26,11 @@ public class Carrinho {
 	}
 	
 	public void adicionarItem(int idLivro, String nomeLivro, String categoria, int quantidade, double preco) {
-		Pedido pedido = new Pedido(idLivro, nomeLivro, categoria, quantidade, preco);
+		Item item = new Item(quantidade, nomeLivro, idLivro, preco, categoria);
 		
 		this.total += (preco * quantidade);
 		this.quantidadeLivros += quantidade;
-		sacola.add(pedido);
+		sacola.add(item);
 	}
 	
 
@@ -51,7 +50,7 @@ public class Carrinho {
 					item_removido = ferramenta.scanInt();
 				} while (item_removido < 1 && item_removido > sacola.size());
 				
-				catalogo.get(sacola.get(item_removido - 1).getIDLivro() - 1).setQuantidadeEstoque(catalogo.get(sacola.get(item_removido - 1).getIDLivro() - 1).getQuantidadeEstoque() + sacola.get(item_removido - 1).getQuantidade());
+				catalogo.get(sacola.get(item_removido - 1).getBookID() - 1).setQuantidadeEstoque(catalogo.get(sacola.get(item_removido - 1).getBookID() - 1).getQuantidadeEstoque() + sacola.get(item_removido - 1).getQuantidade());
 				sacola.remove(item_removido - 1);
 			}	
 		} 
@@ -61,7 +60,9 @@ public class Carrinho {
 		if (verificarCarrinho()) {
 			int input;
 			double frete;
+			Pedido pedido = new Pedido();
 			String cep, pagamento = "";
+			boolean statusPagamento = false;
 			Ferramentas ferramenta = new Ferramentas();
 			 
 			do {
@@ -104,15 +105,22 @@ public class Carrinho {
 					ferramenta.scan();
 					System.out.println("Insira os digitos de seguranca: ");
 					ferramenta.scan();
-					System.out.println("Pagamento feito com sucesso, obrigado!");
+					System.out.println("Pagamento feito com sucesso, obrigado!\n");
+					statusPagamento = true;
+					
 					break;
 				case 2:
-					System.out.println("O boleto foi enviado para seu email.");
+					System.out.println("O boleto foi enviado para seu email.\n");
 					pagamento = "boleto bancario";
+					statusPagamento = false;
+					
 					break;
 				}
-				usuario.adicionarCompra(this.sacola, pagamento);
-				this.sacola.clear();
+				
+				pedido.adicionarPedido(sacola, statusPagamento, pagamento);
+				pedido.setOrderCode(ferramenta.generatePedido().toUpperCase());
+				usuario.adicionarCompra(pedido);
+
 				return;
 			case 2:
 				return;

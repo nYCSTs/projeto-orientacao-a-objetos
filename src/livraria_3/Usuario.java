@@ -18,7 +18,7 @@ public class Usuario {
 	private String email;
 	private String senha;
 	//status
-	private ComprasFeitas historico = new ComprasFeitas();
+	private ArrayList<Pedido> comprasFeitas = new ArrayList<Pedido>();
 	
 	public Usuario(int id, String nome, String cpf, String identidade, String filiacao, String escolaridade, String sexo, String estadoCivil, String naturalidade, String endereco, String cargo, String telefone, String email, String senha) {	
 		this.ID = id;
@@ -37,32 +37,26 @@ public class Usuario {
 		this.senha = senha;
 	}
 	
-	public void adicionarCompra(ArrayList<Pedido> sacola, String pagamento) {
-		int totalCompras;
-		double totalPago = 0;
-		boolean statusPagamento = false;
-		
-		switch (pagamento) {
-		case "cartao de credito":
-			statusPagamento = true;
-			break;
-		case "boleto bancario":
-			statusPagamento = false;
-		}
-		
-		for (totalCompras = 0; totalCompras < sacola.size(); totalCompras++) {
-			historico.pedidos.add(sacola.get(totalCompras));
-			totalPago += sacola.get(totalCompras).getPreco();
-			sacola.get(totalCompras).setPagamento(statusPagamento, pagamento);
-		}
-		
-		historico.adicionarCompra();
-		historico.totalCompras(totalCompras);
-		historico.totalPago(totalPago);	
+	public ArrayList<Pedido> getPedidos() {
+		return this.comprasFeitas;
 	}
 	
-	public void mostrarCompras() {
-		historico.mostrarCompras(this.ID, this.nome);
+	public boolean mostrarCompras() {
+		if (comprasFeitas.size() == 0) {
+			return false;
+		} else {
+			System.out.println(this.nome + "(" + this.ID + ")");
+			for (int i = 0; i < comprasFeitas.size(); i++) {
+				comprasFeitas.get(i).mostrarItens();
+			}
+			System.out.println("\n");
+			return true;
+		}
+		
+	}
+	
+	public void adicionarCompra(Pedido pedido) {
+		comprasFeitas.add(pedido);
 	}
 
 	//GET	

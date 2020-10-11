@@ -1,6 +1,7 @@
 package livraria_3;
 import java.util.ArrayList;
-public class Info {
+
+public class Gerenciar {
 	public void relacaoEstoque(ArrayList<Livro> catalogo) {
 		int qntInfantil = 0, qntTecnico = 0, qntFiccao = 0, qntNFiccao = 0;
 		for (int i = 0; i < catalogo.size(); i++) {
@@ -24,11 +25,25 @@ public class Info {
 		System.out.println("\n\tLivros infantis: " + qntInfantil + "\n\tLivros tecnicos: " + qntTecnico + "\n\tLivros Ficcao: " + qntFiccao + "\n\tLivros de nao ficcao: " + qntNFiccao + "\n");
 	}
 	
-	public void listaCompras(ArrayList<Usuario> usuarios) {
-		for (int i = 0; i < usuarios.size(); i++) {
-			usuarios.get(i).mostrarCompras();
+	public void mostrarCompras(Usuario usuario) {
+		System.out.println(usuario.getNome() + "(" + usuario.getID() + ")");
+		for (int i = 0; i < usuario.getPedidos().size(); i++) {
+			usuario.getPedidos().get(i).mostrarItens();
 		}
 	}
+	
+	public void listaCompras(ArrayList<Usuario> cliente) {
+		for (int i = 0; i < cliente.size(); i++) {
+			if (cliente.get(i).getCargo().equals("cliente")) {
+				if (cliente.get(i).getPedidos().size() > 0) {
+					mostrarCompras(cliente.get(i));
+				} else {
+					System.out.println("Nenhuma compra feita.\n");
+				}
+			}
+		}
+	}
+	
 	
 	public void clientesCadastrados(ArrayList<Usuario> usuarios) {
 		for (int i = 0; i < usuarios.size(); i++) {
@@ -39,23 +54,31 @@ public class Info {
 			System.out.println("\tEmail.........: " + usuarios.get(i).getEmail());
 			System.out.println("\t----------------------------------");
 		}
-		/*
-		 this.ID = id;
-		this.nome = nome;
-		this.CPF = cpf;
-		this.identidade = identidade;
-		this.filiacao = filiacao;
-		this.escolaridade = escolaridade;
-		this.sexo = sexo;
-		this.estadoCivil = estadoCivil;
-		this.naturalidade = naturalidade;
-		this.endereco = endereco;
-		this.cargo = cargo;
-		this.telefone = telefone;
-		this.email = email;
-		this.senha = senha;
-		 
-		 
-		*/
+	}
+	
+	public void gerenciarCompras(ArrayList<Usuario> cliente) {
+		String code;
+		Ferramentas ferramenta = new Ferramentas();
+		
+		for (int i = 0; i < cliente.size(); i++) {
+			if (cliente.get(i).getPedidos().size() > 0) {
+				mostrarCompras(cliente.get(i));
+			}
+		}
+		System.out.println("Qual pedido deseja encaminhar (codigo do pedido): ");
+		do {
+			code = ferramenta.scan().toUpperCase();			
+		} while (code.length() != 6);
+
+		for (int i = 0; i < cliente.size(); i++) {
+			for (int j = 0; j < cliente.get(i).getPedidos().size(); j++){
+				if (cliente.get(i).getPedidos().get(j).getOrderCode().equals(code)) {
+					cliente.get(i).getPedidos().get(j).setStatusEnvio(true);
+					System.out.println("Pedido #" + code + " encaminhado com sucesso.");
+					return;
+				}
+			}
+		}
+		System.out.println("Codigo nao encontrado.");
 	}
 }
