@@ -15,9 +15,9 @@ public class IO {
 		return file;
 	}
 
+	
 	public Usuario criarUsuario(ArrayList<String> dados) {
-		Usuario usuario = new Usuario();
-		usuario.setValues(Integer.parseInt(dados.get(0)), dados.get(1), dados.get(2), dados.get(3), dados.get(4), dados.get(5), dados.get(6), dados.get(7), dados.get(8), dados.get(9), dados.get(10), dados.get(11), dados.get(12), dados.get(13));
+		Usuario usuario = new Usuario(Integer.parseInt(dados.get(0)), dados.get(1), dados.get(2), dados.get(3), dados.get(4), dados.get(5), dados.get(6), dados.get(7), dados.get(8), dados.get(9), dados.get(10), dados.get(11), dados.get(12), dados.get(13));
 		return usuario;
 	}
 	
@@ -65,33 +65,37 @@ public class IO {
 				BufferedReader br = new BufferedReader(fr);
 				
 				//categoria
-				line = br.readLine();
+				line = br.readLine().trim();
 				livro.setCategoria(line);
 				//id
-				line = br.readLine();
+				line = br.readLine().trim();
 				livro.setID(Integer.parseInt(line));
-				//preco
-				line = br.readLine();
-				livro.setPreco(Double.parseDouble(line));
-				//quantidade
-				line = br.readLine();
-				livro.setQuantidadeEstoque(Integer.parseInt(line));
 				//bookName
-				line = br.readLine();
+				line = br.readLine().trim();
 				livro.setBookName(line);
+				//preco
+				line = br.readLine().trim();
+				livro.setPreco(Double.parseDouble(line));
 				//authorName
-				line = br.readLine();
+				line = br.readLine().trim();
 				livro.setAuthorName(line);
+				//editora
+				line = br.readLine().trim();
+				livro.setEditora(line);
+				//quantidade
+				line = br.readLine().trim();
+				livro.setQuantidadeEstoque(Integer.parseInt(line));				
 				//ISBN
-				line = br.readLine();
+				line = br.readLine().trim();
 				livro.setISBN(line);
 				
 				livros.add(livro);
-			} 
-
+			}
+			
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+		
 		
 		return livros;
 	}

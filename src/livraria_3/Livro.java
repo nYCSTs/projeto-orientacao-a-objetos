@@ -1,5 +1,4 @@
 package livraria_3;
-import java.util.ArrayList;
 
 public class Livro {
 	private String categoria;
@@ -9,33 +8,15 @@ public class Livro {
 	private String bookName;
 	private String authorName;
 	private String ISBN;
-	
-	/*
-	public void criarLivro(int id, int quantidadeEstoque, String bookName, String authorName, String ISBN) {
-		this.ID = id;
-		this.quantidadeEstoque = quantidadeEstoque;
-		this.bookName = bookName;
-		this.authorName = authorName;
-		this.ISBN = ISBN;
-	}
-	*/
-	public void mostrarCatalogo(String categoria, ArrayList<Livro> livros) {
-		for (int i = 0; i < livros.size(); i++) {
-			if (livros.get(i).getCategoria().trim().equals(categoria)) {
-				System.out.println("\n\tID:..................... " + livros.get(i).getID());
-				System.out.println("\tPreco:.................. " + livros.get(i).getPreco() + "R$");
-				System.out.println("\tQuantidade em estoque:.. " + livros.get(i).getQuantidadeEstoque());
-				System.out.println("\tNome:................... " + livros.get(i).getBookName());
-				System.out.println("\tAutor:.................. " + livros.get(i).getAuthorName());
-				System.out.println("\tISBN:................... " + livros.get(i).getISBN() + "\n");
-			}
-		}
-	}
-	
+	private String editora;
 	
 	//SET
 	public void setID(int id) {
 		this.ID = id;
+	}
+	
+	public void setEditora(String editora) {
+		this.editora = editora;
 	}
 	
 	public void setCategoria(String categoria) {
@@ -63,9 +44,13 @@ public class Livro {
 	}
 
 
-		//GEET
+	//GET
 	public int getID() {
 		return this.ID;
+	}
+	
+	public String getEditora() {
+		return this.editora;
 	}
 	
 	public String getCategoria() {

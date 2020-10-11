@@ -1,5 +1,6 @@
 package livraria_3;
 import java.util.Scanner;
+import java.io.IOException;
 
 public class Ferramentas {
     
@@ -16,5 +17,5 @@ public class Ferramentas {
     public int scanInt() {
     	Scanner scanner = new Scanner(System.in);
     	return scanner.nextInt();
-    }
+    }    
 }
