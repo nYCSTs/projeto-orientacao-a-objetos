@@ -1,4 +1,4 @@
-package livraria_3;
+package livraria;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -7,9 +7,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class IO {	
-	private int userID = 1;
-	
+public class IO {		
 	public File fileRead(String fileName) {
 		File file = new File(fileName);
 		return file;
@@ -17,7 +15,7 @@ public class IO {
 
 	
 	public Usuario criarUsuario(ArrayList<String> dados) {
-		Usuario usuario = new Usuario(Integer.parseInt(dados.get(0)), dados.get(1), dados.get(2), dados.get(3), dados.get(4), dados.get(5), dados.get(6), dados.get(7), dados.get(8), dados.get(9), dados.get(10), dados.get(11), dados.get(12), dados.get(13));
+		Usuario usuario = new Usuario(Integer.parseInt(dados.get(0)), dados.get(1), dados.get(2), dados.get(3), dados.get(4), dados.get(5), dados.get(6), dados.get(7), dados.get(8), dados.get(9), dados.get(10), dados.get(11), dados.get(12), dados.get(13), dados.get(14));
 		return usuario;
 	}
 	
@@ -28,12 +26,12 @@ public class IO {
 		ArrayList<String> dados = new ArrayList<String>();
 
 		try {
-			for (; fileRead(fileName.concat(Integer.toString(userID))).exists(); userID++) {
-				file = fileRead(fileName.concat(Integer.toString(userID)));
-				FileReader fr= new FileReader(file);
+			for (int i = 1; fileRead(fileName.concat(Integer.toString(i))).exists(); i++) {
+				file = fileRead(fileName.concat(Integer.toString(i)));
+				FileReader fr = new FileReader(file);
 				BufferedReader br = new BufferedReader(fr);
 				while (br.ready()) {
-					dados.add(br.readLine());
+					dados.add(br.readLine().trim());
 				}
 				
 				usuarios.add(criarUsuario(dados));
@@ -98,14 +96,13 @@ public class IO {
 			ex.printStackTrace();
 		}
 		
-		
 		return livros;
 	}
 
 	//REGISTRO
-	public void registrarUsuario(Usuario usuario, int userID) {
+	public void registrarUsuario(Usuario usuario, int userID, String fileName) {
 		try {
-			File file = new File("clientes/cliente-".concat(Integer.toString(userID)));
+			File file = new File(fileName.concat(Integer.toString(userID)));
 			FileWriter writer = new FileWriter(file);
 			BufferedWriter bw = new BufferedWriter(writer);
 
@@ -117,7 +114,9 @@ public class IO {
 			bw.newLine();
 			bw.write(usuario.getIdentidade());
 			bw.newLine();
-			bw.write(usuario.getFiliacao());
+			bw.write(usuario.getPai());
+			bw.newLine();
+			bw.write(usuario.getMae());
 			bw.newLine();
 			bw.write(usuario.getEscolaridade());
 			bw.newLine();

@@ -1,4 +1,4 @@
-package livraria_3;
+package livraria;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 

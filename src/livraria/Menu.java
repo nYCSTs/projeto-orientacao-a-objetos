@@ -1,4 +1,4 @@
-package livraria_3;
+package livraria;
 
 public class Menu {
 	private int input;
@@ -6,7 +6,7 @@ public class Menu {
 	
 	public int loggedOffText() {
 		do {
-			System.out.println("\t1 - Realizar login (Cliente)\n\t2 - Realizar login (Funcionario)\n\t3 - Realizar cadastro\n\t4 - Verificar catalogo\n\t5 - Sair\n>> ");	
+			System.out.println("\t1 - Realizar login\n\t2 - Realizar cadastro\n\t3 - Verificar catalogo\n\t4 - Sair\n>> ");	
 			this.input = ferramenta.scanInt();
 		} while (this.input < 1 && this.input > 4);
 		
@@ -15,9 +15,18 @@ public class Menu {
 	
 	public int loggedInClienteText() {
 		do {
-			System.out.println("\t1 - Compra\n\t2 - Verificar pedidos\n\t3 - Logout\n\t4 - Sair\n>> ");
+			System.out.println("\t1 - Comprar\n\t2 - Verificar pedidos\n\t3 - Logout\n\t4 - Sair\n>> ");
 			this.input = ferramenta.scanInt();
 		} while (this.input < 1 && this.input > 4);
+		
+		return this.input;
+	}
+	
+	public int realizarLoginCadastro(String tipo) {
+		do {
+			System.out.println("\t1 - " + tipo + " de cliente\n\t2 - " + tipo + " de funcionario");
+			this.input = ferramenta.scanInt();
+		} while (this.input < 1 && this.input > 2);
 		
 		return this.input;
 	}
@@ -26,7 +35,7 @@ public class Menu {
 		do {
 			System.out.println("\t1 - Gerenciar pedidos\n\t2 - INFO\n\t3 - Logout\n>> ");
 			this.input = ferramenta.scanInt();
-		} while (this.input < 1 && this.input > 2);
+		} while (this.input < 1 && this.input > 3);
 		
 		return this.input;
 	}

@@ -1,4 +1,4 @@
-package livraria_3;
+package livraria;
 import java.util.ArrayList;
 
 public class Gerenciar {
@@ -34,24 +34,20 @@ public class Gerenciar {
 	
 	public void listaCompras(ArrayList<Usuario> cliente) {
 		for (int i = 0; i < cliente.size(); i++) {
-			if (cliente.get(i).getCargo().equals("cliente")) {
-				if (cliente.get(i).getPedidos().size() > 0) {
-					mostrarCompras(cliente.get(i));
-				} else {
-					System.out.println("Nenhuma compra feita.\n");
-				}
-			}
+			if (cliente.get(i).getPedidos().size() > 0) {
+				mostrarCompras(cliente.get(i));
+			} 
 		}
 	}
 	
 	
 	public void clientesCadastrados(ArrayList<Usuario> usuarios) {
 		for (int i = 0; i < usuarios.size(); i++) {
-			System.out.println("\tID............: " + usuarios.get(i).getID());
-			System.out.println("\tNome..........: " + usuarios.get(i).getNome());
-			System.out.println("\tCargo.........: " + usuarios.get(i).getCargo());
-			System.out.println("\tSexo..........: " + usuarios.get(i).getSexo());
-			System.out.println("\tEmail.........: " + usuarios.get(i).getEmail());
+			System.out.println("\tID:............: " + usuarios.get(i).getID());
+			System.out.println("\tNome:..........: " + usuarios.get(i).getNome());
+			System.out.println("\tCargo:.........: " + usuarios.get(i).getCargo());
+			System.out.println("\tSexo:..........: " + usuarios.get(i).getSexo());
+			System.out.println("\tEmail:.........: " + usuarios.get(i).getEmail());
 			System.out.println("\t----------------------------------");
 		}
 	}
@@ -65,8 +61,9 @@ public class Gerenciar {
 				mostrarCompras(cliente.get(i));
 			}
 		}
-		System.out.println("Qual pedido deseja encaminhar (codigo do pedido): ");
+		
 		do {
+			System.out.println("Qual pedido deseja encaminhar (somente o codigo, 6 digitos): ");
 			code = ferramenta.scan().toUpperCase();			
 		} while (code.length() != 6);
 
@@ -81,4 +78,16 @@ public class Gerenciar {
 		}
 		System.out.println("Codigo nao encontrado.");
 	}
+	
+	public void verificarPagamentos(ArrayList<Usuario> clientes) {
+		for (int i = 0; i < clientes.size(); i++) {
+			System.out.println(clientes.get(i).getNome() + " (" + clientes.get(i).getID() + "):");
+			for (int j = 0; j < clientes.get(i).getPedidos().size(); j++) {
+				System.out.println("\tPedido:...........: #" + clientes.get(i).getPedidos().get(j).getOrderCode());
+				System.out.println("\tNome:.............: " + clientes.get(i).getPedidos().get(j).getFormaPagamento());
+				System.out.println("\tPagamento:........: " + clientes.get(i).getPedidos().get(j).getStatusPagamento() + "\n");
+			}
+			System.out.println("-------------------");
+		}
+ 	}
 }

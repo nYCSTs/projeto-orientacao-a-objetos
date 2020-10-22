@@ -1,4 +1,4 @@
-package livraria_3;
+package livraria;
 
 public class Livro {
 	private String categoria;

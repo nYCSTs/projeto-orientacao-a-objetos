@@ -1,4 +1,4 @@
-package livraria_3;
+package livraria;
 import java.util.Scanner;
 @SuppressWarnings("resource")
 public class Ferramentas {	
@@ -14,7 +14,6 @@ public class Ferramentas {
     
     public int scanInt() {
 		Scanner scanner = new Scanner(System.in);
-
     	return scanner.nextInt();
     }
     

@@ -1,4 +1,4 @@
-package livraria_3;
+package livraria;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 
@@ -32,7 +32,6 @@ public class Carrinho {
 		this.quantidadeLivros += quantidade;
 		sacola.add(item);
 	}
-	
 
 	public void removerItem(ArrayList<Livro> catalogo) {
 		char opc;
@@ -73,8 +72,11 @@ public class Carrinho {
 			switch (input) {
 			case 1:
 				do {
-				System.out.println("CEP para entrega: ");
-				cep = ferramenta.scan();
+					do {
+						System.out.println("CEP para entrega: ");
+						cep = ferramenta.scan();
+					} while (cep.length() != 8);
+				
 					if (cep.charAt(0) == '6') {
 						frete = 35;
 					} else if (cep.charAt(0) == '4') {
@@ -83,9 +85,9 @@ public class Carrinho {
 						frete = 10;
 					}
 					
-					System.out.println("Livros.......: " + format.format(this.total) + "R$");
-					System.out.println("Frete........: " + frete + "R$");
-					System.out.println("Total........: " + format.format(this.total + frete) + "R$");
+					System.out.println("Livros:...........: " + format.format(this.total) + "R$");
+					System.out.println("Frete:............: " + frete + "R$");
+					System.out.println("Total:............: " + format.format(this.total + frete) + "R$");
 					
 					do {
 						System.out.println("\n\t1 - Finalizar pedido\n\t2 - Mudar CEP");
