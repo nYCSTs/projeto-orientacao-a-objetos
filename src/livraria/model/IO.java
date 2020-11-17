@@ -1,4 +1,4 @@
-package livraria;
+package livraria.model;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -14,35 +14,47 @@ public class IO {
 	}
 
 	
-	public Usuario criarUsuario(ArrayList<String> dados) {
-		Usuario usuario = new Usuario(Integer.parseInt(dados.get(0)), dados.get(1), dados.get(2), dados.get(3), dados.get(4), dados.get(5), dados.get(6), dados.get(7), dados.get(8), dados.get(9), dados.get(10), dados.get(11), dados.get(12), dados.get(13), dados.get(14));
-		return usuario;
+	public Cliente criarCliente(ArrayList<String> dados) {
+		Cliente cliente = new Cliente(Integer.parseInt(dados.get(0)), dados.get(1), dados.get(2), dados.get(3), dados.get(4), dados.get(5), dados.get(6), dados.get(7), dados.get(8), dados.get(9), dados.get(10), dados.get(11), dados.get(12), dados.get(13), dados.get(14));
+		return cliente;
+	}
+	
+	public Funcionario criarFuncionario(ArrayList<String> dados) {
+		Funcionario funcionario = new Funcionario(Integer.parseInt(dados.get(0)), dados.get(1), dados.get(2), dados.get(3), dados.get(4), dados.get(5), dados.get(6), dados.get(7), dados.get(8), dados.get(9), dados.get(10), dados.get(11), dados.get(12), dados.get(13), dados.get(14));
+		return funcionario;
 	}
 	
 	//LEITURA
-	public ArrayList<Usuario> leituraUsuarios(String fileName) {
+	public void leituraUsuarios(ArrayList<Cliente> clientes, ArrayList<Funcionario> funcionarios) {
 		File file;
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+		String[] paths = {"clientes/cliente-", "funcionarios/funcionario-"};
 		ArrayList<String> dados = new ArrayList<String>();
-
+		
 		try {
-			for (int i = 1; fileRead(fileName.concat(Integer.toString(i))).exists(); i++) {
-				file = fileRead(fileName.concat(Integer.toString(i)));
-				FileReader fr = new FileReader(file);
-				BufferedReader br = new BufferedReader(fr);
-				while (br.ready()) {
-					dados.add(br.readLine().trim());
+			for (int i = 0; i < paths.length; i++) {
+				for (int j = 1; fileRead(paths[i].concat(Integer.toString(j))).exists(); j++) {
+					file = fileRead(paths[i].concat(Integer.toString(j)));
+					FileReader fr = new FileReader(file);
+					BufferedReader br = new BufferedReader(fr);
+					while (br.ready()) {
+						dados.add(br.readLine().trim());
+					}
+					
+					switch (i) {
+					case 0:
+						clientes.add(criarCliente(dados));
+						break;
+					case 1:
+						funcionarios.add(criarFuncionario(dados));
+					}
+					
+					dados.clear();
+					br.close();
 				}
-				
-				usuarios.add(criarUsuario(dados));
-				dados.clear();
-				br.close();
 			}
 		} catch (IOException ex)  {
 			ex.getStackTrace();
 		}	
-		
-		return usuarios;
 	}
 	
 	public Livro criarLivro() {

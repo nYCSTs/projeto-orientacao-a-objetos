@@ -1,4 +1,4 @@
-package livraria;
+package livraria.model;
 
 public class Livro {
 	private String categoria;
@@ -75,7 +75,5 @@ public class Livro {
 	
 	public String getISBN() {
 		return this.ISBN;
-	}
-	
-	
+	}	
 }

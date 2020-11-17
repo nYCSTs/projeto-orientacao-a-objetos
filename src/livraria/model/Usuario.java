@@ -1,8 +1,6 @@
-package livraria;
-import java.util.ArrayList;
+package livraria.model;
 
-public class Usuario {	
-	//dados
+public abstract class Usuario {	
 	private int ID;
 	private String nome;
 	private String CPF;
@@ -18,8 +16,7 @@ public class Usuario {
 	private String telefone;
 	private String email;
 	private String senha;
-	//status
-	private ArrayList<Pedido> comprasFeitas = new ArrayList<Pedido>();
+	
 	
 	public Usuario(int id, String nome, String cpf, String identidade, String pai, String mae, String escolaridade, String sexo, String estadoCivil, String naturalidade, String endereco, String cargo, String telefone, String email, String senha) {	
 		this.ID = id;
@@ -38,29 +35,8 @@ public class Usuario {
 		this.email = email;
 		this.senha = senha;
 	}
-	
-	public ArrayList<Pedido> getPedidos() {
-		return this.comprasFeitas;
-	}
-	
-	public boolean mostrarCompras() {
-		if (comprasFeitas.size() == 0) {
-			System.out.println("Nenhuma compra feita.\n");
-			return false;
-		} else {
-			System.out.println(this.nome + "(" + this.ID + ")");
-			for (int i = 0; i < comprasFeitas.size(); i++) {
-				comprasFeitas.get(i).mostrarItens();
-			}
-			return true;
-		}
-	}
-	
-	public void adicionarCompra(Pedido pedido) {
-		comprasFeitas.add(pedido);
-	}
 
-	//GET	
+	//metodos GET	
 	public int getID() {
 		return this.ID;
 	}
@@ -106,5 +82,4 @@ public class Usuario {
 	public String getSenha() {
 		return this.senha;
 	}
-	
 }

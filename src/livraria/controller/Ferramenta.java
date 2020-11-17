@@ -1,7 +1,8 @@
-package livraria;
+package livraria.controller;
 import java.util.Scanner;
+
 @SuppressWarnings("resource")
-public class Ferramentas {	
+public class Ferramenta {	
     public String scan() {     
 		Scanner scanner = new Scanner(System.in);
     	return scanner.next(); 
@@ -17,8 +18,8 @@ public class Ferramentas {
     	return scanner.nextInt();
     }
     
-    public String generatePedido() {
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" + "abcdefghijklmnopqrstuvxyz"; 
+    public String gerarPedido() {
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789"; 
         StringBuilder sb = new StringBuilder(6); 
   
         for (int i = 0; i < 6; i++) { 
