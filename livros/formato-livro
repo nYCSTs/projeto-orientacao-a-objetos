@@ -1,8 +1,10 @@
 CATEGORIA
 ID
+Idioma
 Titulo do livro
 Preco
 Autor
 Editora
+Quantidade de paginas
 Quantidade em estoque
 ISBN

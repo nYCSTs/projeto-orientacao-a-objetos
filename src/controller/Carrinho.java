@@ -4,27 +4,37 @@ import model.Cliente;
 import model.Item;
 import model.Livro;
 import view.Menu;
-import java.text.DecimalFormat;
 
+/**
+ * Responsavel pela manipulacao de adicao e remocao dos itens adicionados pelo cliente ao carrinho
+ * @author lucas
+ * @version 1.0 (Nov 2020)
+ */
 public class Carrinho {
 	private Menu menu = new Menu();
+	private Pagamento pagamento = new Pagamento();
 	private ArrayList<Item> sacola = new ArrayList<Item>();
 	public double total = 0;
 	public int quantidadeLivros = 0;
-	private DecimalFormat format = new DecimalFormat("#0.00");
+	private Ferramenta ferramenta = new Ferramenta();
 	
+	/**
+	 * Verifica se o carrinho esta vazio, nao estando vazio, faz uma descricao dos itens contidos no carrinho
+	 * @return verdadeiro caso o carrinho possua itens e falso caso esteja vazio
+	 */
 	public boolean verificarCarrinho() {
 		double total = 0;
 		String espacamento = " ";
 
 		if (sacola.size() > 0) {
 			System.out.println("Atualmente seu carrinho conta com os itens: ");
-			System.out.println(espacamento.repeat(41) + "Q " + "  I     " + "    total" );
+			System.out.println(espacamento.repeat(90) + " Q " + "  I     " + "    total" );
 			for (int i = 0; i < sacola.size(); i++) {
-				System.out.println("(" + (i+1) + ") " + sacola.get(i).getBookName() + espacamento.repeat(35 - sacola.get(i).getBookName().length()) + "(" + sacola.get(i).getQuantidade() + "x " + format.format(sacola.get(i).getPreco()) + ")  -  " + format.format(sacola.get(i).getQuantidade() * sacola.get(i).getPreco()) + "R$");
+				System.out.println("(" + (i+1) + ") " + sacola.get(i).getBookName() + espacamento.repeat(85 - sacola.get(i).getBookName().length()) + "(" + sacola.get(i).getQuantidade() + "x " + ferramenta.obterValorFormatado(sacola.get(i).getPreco()) + ")  -  " + ferramenta.obterValorFormatado(sacola.get(i).getQuantidade() * sacola.get(i).getPreco()) + "R$");
 				total += sacola.get(i).getQuantidade() * sacola.get(i).getPreco();
 			}
-			System.out.println("Valor total: " + format.format(total) + "R$");
+			this.total = total;
+			System.out.println("Valor total: " + ferramenta.obterValorFormatado(this.total) + "R$");
 			return true;
 		} else {
 			System.out.println("\nO carrinho esta vazio.");
@@ -32,6 +42,14 @@ public class Carrinho {
 		}
 	}
 	
+	/**
+	 * Responsavel por adicionar itens ao carrinho (sacola)
+	 * @param idLivro ID do livro a ser adicionado
+	 * @param nomeLivro nome do livro a ser adicionado
+	 * @param categoria a categoria a qual o livro pertence
+	 * @param quantidade quantidade a ser adicionada ao carrinho
+	 * @param preco preco de cada unidade
+	 */
 	public void adicionarItem(int idLivro, String nomeLivro, String categoria, int quantidade, double preco) {
 		Item item = new Item(quantidade, nomeLivro, idLivro, preco, categoria);	
 		
@@ -40,73 +58,42 @@ public class Carrinho {
 		sacola.add(item);
 	}
 
-	public void removerItem(ArrayList<Livro> catalogo) {
-		char opc;
+	/**
+	 * Responsavel por remover do carrinho (sacola) um determinado item e atualizar o estoque com a quantidade removida
+	 * @param catalogo lista de todos os livros registrados. Usado para atualizar a quantidade em estoque caso o cliente deseje remover itens do carrinho
+	 * @return verifica o estado do carrinho apos a remocao de um item. Verdadeiro caso haja itens no carrinho e falso caso esteja vazio
+	 */
+	public boolean removerItem(ArrayList<Livro> catalogo) {
 		int item_removido;
-		Ferramenta ferramenta = new Ferramenta();
 		
 		if (verificarCarrinho()) {
-			System.out.println("\nDeseja remover algum item? (S/N)");
-			opc = ferramenta.scan().toUpperCase().charAt(0);
-			
-			switch (opc) {
-			case 'S':
-				item_removido = menu.textoRemoverItem(sacola.size());
+			item_removido = menu.textoRemoverItem(sacola.size());
+			if (item_removido != 0) {
 				catalogo.get(sacola.get(item_removido - 1).getBookID() - 1).setQuantidadeEstoque(catalogo.get(sacola.get(item_removido - 1).getBookID() - 1).getQuantidadeEstoque() + sacola.get(item_removido - 1).getQuantidade());
 				sacola.remove(item_removido - 1);
-			}	
+				return verificarCarrinho();
+			}
+			return true;
 		} 
+		return false;
 	}
 	
-	public int pagamento(Cliente cliente, ArrayList<Livro> catalogo) {
+	/**
+	 * 
+	 * @param cliente objeto referente ao cliente que esta realizando a compra
+	 * @param catalogo lista de todos os livros registrados. E usado caso o cliente deseje remover um item antes de finalizar a compra
+	 * @return se pagamento for feito retorna 1, caso contrario, 0
+	 */
+	public int prosseguirPagamento(Cliente cliente, ArrayList<Livro> catalogo) {
 		if (verificarCarrinho()) {
-			double frete;
-			Pedido pedido = new Pedido();
-			String cep, enderecoCompleto, formaPagamento = "";
-			Ferramenta ferramenta = new Ferramenta();
-			 
 			while (true) {
 				switch (menu.textoProsseguirPagamento()) {
 					case 1:
-						do {
-							cep = menu.textoObterCep();
-						
-							if (cep.charAt(0) == '6') {
-								frete = 35;
-							} else if (cep.charAt(0) == '4') {
-								frete = 25;
-							} else {
-								frete = 10;
-							}
-							
-							System.out.println("\nLivros:...........: " + format.format(this.total) + "R$");
-							System.out.println("Frete:............: " + format.format(frete) + "R$");
-							System.out.println("Total:............: " + format.format(this.total + frete) + "R$");
-								
-						} while (menu.textoAlterarCep() != 1);
-						
-						switch (menu.textoFormaPagamento()) {
-							case 1:
-								formaPagamento = "cartao de credito";
-								menu.textoDadosCartao();
-								break;
-							case 2:
-								System.out.println("O boleto foi enviado para seu email.\n");
-								formaPagamento = "boleto bancario";
-						}
-						
-						enderecoCompleto = menu.textoObterEndereco();
-						
-						System.out.println("Pagamento feito com sucesso, obrigado!\n");
-						
-						pedido.adicionarPedido(sacola, true, formaPagamento, enderecoCompleto, this.total, frete, this.total + frete);
-						pedido.setCodigoDePedido(ferramenta.gerarPedido());
-						cliente.adicionarCompra(pedido);
-						cliente.atualizarQuantidadeComprada(sacola);
+						System.out.println(total);
+						pagamento.realizarPagamento(sacola, cliente, total);
 						return 1;
 					case 2:
-						removerItem(catalogo);
-						if (!verificarCarrinho()) {
+						if (!removerItem(catalogo)) {
 							return 0;
 						}
 						break;
@@ -116,5 +103,9 @@ public class Carrinho {
 			}
 		}
 		return 0;
+	}
+	
+	public ArrayList<Item> getSacola() {
+		return this.sacola;
 	}
 }

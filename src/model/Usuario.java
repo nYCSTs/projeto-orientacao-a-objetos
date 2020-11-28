@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Serve de modelo para as classes Cliente e Funcionario
+ * @author lucas
+ * @version 1.0 (Nov 2020)
+ */
 public abstract class Usuario {	
 	private int ID;
 	private String nome;
@@ -17,7 +22,24 @@ public abstract class Usuario {
 	private String email;
 	private String senha;
 	
-	
+	/**
+	 * Possui caracteristicas que sao comum para o Cliente e para o Funcionario, a classe Usuario funciona portanto como uma classe pai para os dois.
+	 * @param id referente ao id do cliente
+	 * @param nome referente ao nome do cliente
+	 * @param cpf referente ao cpf do cliente
+	 * @param identidade referente a identidade do cliente
+	 * @param pai referente ao nome do pai do cliente 
+	 * @param mae referente ao nome da mae do cliente 
+	 * @param escolaridade referente a escolaridade do cliente 
+	 * @param sexo referente ao sexo do cliente 
+	 * @param estadoCivil referente ao estado civil do cliente 
+	 * @param naturalidade referente ao naturalidade do cliente 
+	 * @param endereco referente ao endereco do cliente 
+	 * @param cargo referente ao cargo do cliente 
+	 * @param telefone referente ao telefone do cliente 
+	 * @param email referente ao email do cliente 
+	 * @param senha referente ao senha do cliente 
+	 */
 	public Usuario(int id, String nome, String cpf, String identidade, String pai, String mae, String escolaridade, String sexo, String estadoCivil, String naturalidade, String endereco, String cargo, String telefone, String email, String senha) {	
 		this.ID = id;
 		this.nome = nome;
@@ -36,7 +58,7 @@ public abstract class Usuario {
 		this.senha = senha;
 	}
 
-	//metodos GET	
+	//GET	
 	public int getID() {
 		return this.ID;
 	}

@@ -1,22 +1,36 @@
 package model;
 
+
+/**
+ * <div id="classe-item">Referente as caracteristicas dos livros</div>
+ * @author lucas
+ * @version 1.0 (Nov 2020)
+ */
 public class Item {
 	private int quantidade;
-	private String nomeDoLivro ;
-	private int idDoLivro;
+	private int livroID;
 	private double preco;
+	private String livroNome;
 	private String categoria;
 	
-	public Item(int quantidade, String nomeDoLivro, int idDoLivro, double preco, String categoria) {
+	/**
+	 * Construtor para a classe
+	 * @param quantidade quantidade de livros
+	 * @param livroNome nome do livro
+	 * @param livroID id associado ao livro
+	 * @param preco preco do livro
+	 * @param categoria categoria do livro
+	 */
+	public Item(int quantidade, String livroNome, int livroID, double preco, String categoria) {
 		this.quantidade = quantidade;
-		this.nomeDoLivro = nomeDoLivro;
-		this.idDoLivro = idDoLivro;
+		this.livroNome = livroNome;
+		this.livroID = livroID;
 		this.preco = preco;
 		this.categoria = categoria;
 	}
 	
 	public int getBookID() {
-		return this.idDoLivro;
+		return this.livroID;
 	}
 	
 	public int getQuantidade() {
@@ -28,7 +42,7 @@ public class Item {
 	}
 	
 	public String getBookName() {
-		return this.nomeDoLivro;
+		return this.livroNome;
 	}
 	
 	public String getCategoria() {

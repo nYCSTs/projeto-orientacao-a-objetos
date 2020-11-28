@@ -1,14 +1,24 @@
+/**
+ * <div id="classe-livro></div>
+ */
 package model;
 
+/**
+ * Possui caracteristicas significativas para identificar os livros da livraria
+ * @author lucas
+ * @version 1.0 (Nov 2020)
+ */
 public class Livro {
-	private String categoria;
 	private int ID;
-	private double preco;
+	private int quantidadePaginas;
 	private int quantidadeEstoque;
-	private String bookName;
-	private String authorName;
+	private double preco;
+	private String nomeLivro;
+	private String nomeAutor;
 	private String ISBN;
 	private String editora;
+	private String idioma;
+	private String categoria;
 	
 	
 	//SET
@@ -32,17 +42,26 @@ public class Livro {
 		this.quantidadeEstoque = quantidadeEstoque;
 	}
 
-	public void setBookName(String bookName) {
-		this.bookName = bookName;
+	public void setBookName(String nomeLivro) {
+		this.nomeLivro = nomeLivro;
 	}
 
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
+	public void setAuthorName(String nomeAutor) {
+		this.nomeAutor = nomeAutor;
 	}
 	
 	public void setISBN(String ISBN) {
 		this.ISBN = ISBN;
 	}
+	
+	public void setIdioma(String idioma) {
+		this.idioma = idioma;
+	}
+	
+	public void setQuantidadePaginas(int quantidadePaginas) {
+		this.quantidadePaginas = quantidadePaginas;
+	}
+	
 
 	//GET
 	public int getID() {
@@ -66,14 +85,22 @@ public class Livro {
 	}
 	
 	public String getBookName() {
-		return this.bookName;
+		return this.nomeLivro;
 	}
 	
 	public String getAuthorName() {
-		return this.authorName;
+		return this.nomeAutor;
 	}
 	
 	public String getISBN() {
 		return this.ISBN;
 	}	
+	
+	public String getIdioma() {
+		return this.idioma;
+	}
+	
+	public int getQuantidadePaginas() {
+		return this.quantidadePaginas;
+	}
 }
